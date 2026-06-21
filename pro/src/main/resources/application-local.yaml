@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/${POSTGRES_DB:trustpay_dev}
+    username: ${POSTGRES_USER:trustpay}
+    password: ${POSTGRES_PASSWORD:trustpay123}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
