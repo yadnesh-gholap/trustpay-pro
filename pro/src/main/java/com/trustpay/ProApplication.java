@@ -1,4 +1,4 @@
-package com.trustpay.pro;
+package com.trustpay;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
