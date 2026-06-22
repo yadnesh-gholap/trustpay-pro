@@ -9,3 +9,11 @@ Escrow Platform built using Java, Spring Boot, PostgreSQL, Kafka, Redis and Dock
 To spin up the local PostgreSQL database instance, navigate to the root directory and execute:
 ```bash
 docker compose up -d
+
+## Flyway Migration
+
+Flyway automatically executes sequential SQL schema migrations during the application startup lifecycle.
+
+* **Migration File Repository location:** `pro/src/main/resources/db/migration`
+* **Naming Standard:** Use immutable version numbering sequences (e.g., `V1__init_schema.sql`, `V2__create_deal_table.sql`). 
+* **Rule:** Never alter a migration script file once it has been integrated and executed on an environment.
