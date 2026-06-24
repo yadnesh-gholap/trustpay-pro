@@ -30,3 +30,13 @@ Example header:
 
 ```text
 X-Correlation-ID: test-123
+
+## API Documentation
+
+Swagger UI is available at:
+
+http://localhost:8080/swagger-ui.html
+
+OpenAPI JSON is available at:
+
+http://localhost:8080/v3/api-docs
