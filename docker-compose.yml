@@ -19,5 +19,17 @@ services:
       timeout: 5s
       retries: 5
 
+  trustpay-app:
+      build:
+        context: ./pro
+      container_name: trustpay-app
+      depends_on:
+        postgres:
+          condition: service_healthy
+      environment:
+        SPRING_PROFILES_ACTIVE: local
+      ports:
+        - "8080:8080"
+
 volumes:
   postgres_data:
