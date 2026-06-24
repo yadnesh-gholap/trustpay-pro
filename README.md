@@ -40,3 +40,19 @@ http://localhost:8080/swagger-ui.html
 OpenAPI JSON is available at:
 
 http://localhost:8080/v3/api-docs
+
+## Running with Docker
+
+Build and start services:
+
+```bash
+docker compose up --build
+
+Stop services:
+
+docker compose down
+
+Services:
+
+Spring Boot App → localhost:8080
+PostgreSQL → localhost:5432
