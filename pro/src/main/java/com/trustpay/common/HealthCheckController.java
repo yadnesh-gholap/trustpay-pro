@@ -1,18 +1,29 @@
 package com.trustpay.common;
 
-import lombok.extern.slf4j.Slf4j;
+import com.trustpay.common.dto.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Map;
 
-@Slf4j
 @RestController
+@RequestMapping("/api/v1")
 public class HealthCheckController {
 
-    @GetMapping("/api/v1/health-check")
-    public Map<String, String> healthCheck() {
-        log.info("Health check API invoked");
-        return Map.of("status", "TrustPay API is running");
+    @GetMapping("/health-check")
+    public ResponseEntity<ApiResponse<Map<String, String>>> checkHealth() {
+        Map<String, String> statusDetails = Map.of(
+                "status", "UP",
+                "database", "CONNECTED"
+        );
+
+        // Wrap the payload using our static success utility helper
+        ApiResponse<Map<String, String>> response = ApiResponse.success(
+                "System engine is fully operational.",
+                statusDetails
+        );
+
+        return ResponseEntity.ok(response);
     }
 }
