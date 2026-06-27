@@ -1,6 +1,7 @@
 package com.trustpay.common.exception;
 
 import com.trustpay.common.dto.ErrorResponse;
+import com.trustpay.common.dto.ValidationErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.FieldError;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -63,6 +68,33 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    // 0. Handle Request Body Validation Failures (HTTP 400 Bad Request)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ValidationErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
+        String correlationId = getCorrelationIdOrFallback();
+        log.error("[{}] Request payload validation failed.", correlationId);
+
+        // Map to hold our field-level validation errors
+        Map<String, String> validationErrors = new HashMap<>();
+
+        // Loop through all validation errors caught by Spring
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            validationErrors.put(fieldName, errorMessage);
+        });
+
+        ValidationErrorResponse errorBody = new ValidationErrorResponse(
+                "Validation failed for incoming request parameters.",
+                validationErrors
+        );
+
+        return new ResponseEntity<>(errorBody, HttpStatus.BAD_REQUEST);
+    }
+
+    
+
 
     private String getCorrelationIdOrFallback() {
         String correlationId = MDC.get(CORRELATION_ID_KEY);
