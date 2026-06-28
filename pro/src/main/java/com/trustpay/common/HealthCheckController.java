@@ -26,4 +26,9 @@ public class HealthCheckController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/protected-test")
+    public ResponseEntity<String> testProtected() {
+        return ResponseEntity.ok("If you can see this, the security wall is broken!");
+    }
 }
