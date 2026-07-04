@@ -34,15 +34,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null) {
             try {
-
                 jwtTokenProvider.validateToken(token);
-
-
                 String username = jwtTokenProvider.getUsernameFromToken(token);
                 log.info("Valid JWT received for username={}", username);
-
             } catch (Exception ex) {
-                log.warn("Invalid JWT token received: {}", ex.getMessage());
+                // FIX: Scrubbed raw exception message tracking for production security standard compliance
+                log.warn("JWT validation failed");
             }
         }
 

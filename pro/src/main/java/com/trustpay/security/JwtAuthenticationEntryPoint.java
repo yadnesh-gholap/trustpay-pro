@@ -31,15 +31,16 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     ) throws ServletException, IOException {
 
         String correlationId = MDC.get("correlationId");
-        String activeCorrelationId = (correlationId != null) ? correlationId : "SYSTEM-UNKNOWN";
+        // Ensure we fall back to a random UUID string if MDC is empty locally
+        String activeCorrelationId = (correlationId != null) ? correlationId : java.util.UUID.randomUUID().toString();
 
-        // Fixed: Provided exactly 5 arguments to match your (int, String, String, String, String) constructor signature
+        // FIX: Placed activeCorrelationId into the final constructor slot to replace the duplicate timestamp string!
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.UNAUTHORIZED.value(),
                 HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 "Authentication is required to access this resource.",
                 request.getRequestURI(),
-                Instant.now().toString()
+                activeCorrelationId
         );
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
